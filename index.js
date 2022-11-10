@@ -1,28 +1,28 @@
-const express = require("express");
-const app = express();
-const cors = require("cors");
-const pool = require("./db");
-/* 
-    Middleware is software that provides common services and capabilities to applications 
-    outside of what’s offered by the operating system. 
-*/
+import express from "express";
+import cors from "cors";
+import { pool } from "./db.js";
 
 /*
-    express.json() is a built-in middleware function in Express. 
-    This method is used to parse the incoming requests with JSON payloads and is based upon the bodyparser.
-    This method returns the middleware that only parses JSON and only looks at the requests where the 
-    content-type header matches the type option.
+    Using below implementation from fakeDataProvider as used for frontend
+    ```
+    const dataProvider = fakeDataProvider({
+        // Our Data
+    });
+    ```
+    We got the getList method working 
+    dataProvider.getList("tasks").then((response) => { console.log(response) }); 
+
+    We need the same implementation for our server. 
+    Approach : 
+    1. Modify the my_server.ts file to initialize our server. 
+    2. https://github.com/marmelab/FakeRest/tree/master/src This is what we should target for initializing our own server.
+    Please refer comments in my_server.ts file. 
 */
+
+const app = express();
+
 app.use(cors());
 app.use(express.json());
-
-/* Routes :
-    Create a Task
-    Get all Tasks
-    Get a Task
-    Update a Task
-    Delete a Task
-*/
 
 app.get("/", async (req, res) => {
     try {
@@ -52,6 +52,7 @@ app.get("/tasks", async (req, res) => {
             "SELECT * FROM tasks"
         );
         res.json(allTasks.rows);
+        console.log(res);
     } catch (err) {
         console.log(err.message);
     }
@@ -94,7 +95,6 @@ app.delete("/tasks/:id", async (req, res) => {
     }
 })
 
-//  bind and listen the connections on the specified host and port.
 app.listen(5000, () => {
     console.log("Server Started on port 5000");
 })

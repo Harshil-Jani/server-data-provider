@@ -1,4 +1,5 @@
-const Pool = require("pg").Pool;
+import pg from "pg";
+const { Pool } = pg;
 /*
     In a nutshell, the Connection pool is similar to a cache where we store frequently 
     accessed data. Here the data is a database connection. The goal is to achieve the 
@@ -6,12 +7,10 @@ const Pool = require("pg").Pool;
     there is a demand for the data.
 */
 
-const pool = new Pool({
+export const pool = new Pool({
     user: "postgres",
     password: "bunny",
     host: "localhost",
     port: 5432,
     database: "pernkeep"
 });
-
-module.exports = pool;
